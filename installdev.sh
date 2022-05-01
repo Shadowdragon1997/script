@@ -10,7 +10,7 @@ plain='\033[0m'
 cur_dir=$(pwd)
 
 # check root
-[[ $EUID -ne 0 ]] && echo -e "${red}Lỗi：${plain} Tập lệnh này phải được chạy với tư cách người dùng root!\n" && exit 1
+[[ $EUID -ne 0 ]] && echo -e "${red}Lỗi：${plain} Kịch bản này phải được chạy bằng cách sử dụng người dùng root!\n" && exit 1
 
 # check os
 if [[ -f /etc/redhat-release ]]; then
@@ -28,7 +28,7 @@ elif cat /proc/version | grep -Eqi "ubuntu"; then
 elif cat /proc/version | grep -Eqi "centos|red hat|redhat"; then
     release="centos"
 else
-    echo -e "${red}Phiên bản hệ thống không được phát hiện, vui lòng liên hệ với tác giả kịch bản!${plain}\n" && exit 1
+    echo -e "${red}Phiên bản hệ thống không được phát hiện, vui lòng liên hệ với tác giả tập lệnh!${plain}\n" && exit 1
 fi
 
 arch=$(arch)
@@ -39,13 +39,13 @@ elif [[ $arch == "aarch64" || $arch == "arm64" ]]; then
   arch="arm64-v8a"
 else
   arch="64"
-  echo -e "${red}Không phát hiện được giản đồ, hãy sử dụng lược đồ mặc định: ${arch}${plain}"
+  echo -e "${red}Phát hiện kiến trúc thất bại, sử dụng kiến trúc mặc định: ${arch}${plain}"
 fi
 
-echo "Ngành kiến ​​trúc: ${arch}"
+echo "Kiến trúc: ${arch}"
 
 if [ "$(getconf WORD_BIT)" != '32' ] && [ "$(getconf LONG_BIT)" != '64' ] ; then
-    echo "Phần mềm này không hỗ trợ hệ thống 32-bit (x86), vui lòng sử dụng hệ thống 64-bit (x86_64), nếu phát hiện sai, vui lòng liên hệ với tác giả"
+    echo "Phần mềm này không hỗ trợ hệ thống 32 bit (x86), sử dụng hệ thống 64-bit (x86_64) và liên hệ với tác giả nếu phát hiện không chính xác"
     exit 2
 fi
 
@@ -65,11 +65,11 @@ if [[ x"${release}" == x"centos" ]]; then
     fi
 elif [[ x"${release}" == x"ubuntu" ]]; then
     if [[ ${os_version} -lt 16 ]]; then
-        echo -e "${red}Vui lòng sử dụng Ubuntu 16 hoặc cao hơn!${plain}\n" && exit 1
+        echo -e "${red}Vui lòng sử dụng Ubuntu 16 trở lên！${plain}\n" && exit 1
     fi
 elif [[ x"${release}" == x"debian" ]]; then
     if [[ ${os_version} -lt 8 ]]; then
-        echo -e "${red}Vui lòng sử dụng Debian 8 trở lên!${plain}\n" && exit 1
+        echo -e "${red}Vui lòng sử dụng Debian 8 trở lên！${plain}\n" && exit 1
     fi
 fi
 
@@ -109,20 +109,20 @@ install_XrayR() {
 	cd /usr/local/XrayR/
 
     if  [ $# == 0 ] ;then
-        last_version=$(curl -Ls "https://api.github.com/repos/Shadowdragon1997/cauhinh2/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+        last_version=$(curl -Ls "https://api.github.com/repos/AikoCute/XrayR/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         if [[ ! -n "$last_version" ]]; then
             echo -e "${red}Phát hiện phiên bản XrayR không thành công, có thể vượt quá giới hạn GIthub API, vui lòng thử lại sau hoặc chỉ định cài đặt phiên bản XrayR theo cách thủ công${plain}"
             exit 1
         fi
         echo -e "Phiên bản mới nhất của XrayR đã được phát hiện：${last_version}，Bắt đầu cài đặt"
-        wget -N --no-check-certificate -O /usr/local/XrayR/XrayR-linux.zip https://github.com/Shadowdragon1997/cauhinh2/releases/download/${last_version}/XrayR-linux-${arch}.zip
+        wget -N --no-check-certificate -O /usr/local/XrayR/XrayR-linux.zip https://github.com/AikoCute/XrayR/releases/download/${last_version}/XrayR-linux-${arch}.zip
         if [[ $? -ne 0 ]]; then
             echo -e "${red}Tải xuống XrayR thất bại, hãy chắc chắn rằng máy chủ của bạn có thể tải về các tập tin Github${plain}"
             exit 1
         fi
     else
         last_version=$1
-        url="https://github.com/Shadowdragon1997/cauhinh2/releases/download/${last_version}/XrayR-linux-${arch}.zip"
+        url="https://github.com/AikoCute/XrayR/releases/download/${last_version}/XrayR-linux-${arch}.zip"
         echo -e "Bắt đầu cài đặt XrayR v$1"
         wget -N --no-check-certificate -O /usr/local/XrayR/XrayR-linux.zip ${url}
         if [[ $? -ne 0 ]]; then
@@ -136,29 +136,29 @@ install_XrayR() {
     chmod +x XrayR
     mkdir /etc/XrayR/ -p
     rm /etc/systemd/system/XrayR.service -f
-    file="https://raw.githubusercontent.com/AikoCute/XrayR-release/master/XrayR.service"
+    file="https://github.com/AikoCute/XrayR-release/raw/data/XrayR.service"
     wget -N --no-check-certificate -O /etc/systemd/system/XrayR.service ${file}
     #cp -f XrayR.service /etc/systemd/system/
     systemctl daemon-reload
     systemctl stop XrayR
     systemctl enable XrayR
-    echo -e "${green}XrayR ${last_version}${plain} Quá trình cài đặt hoàn tất, nó đã được thiết lập để bắt đầu tự động"
+    echo -e "${green}XrayR ${last_version}${plain} Quá trình cài đặt hoàn tất và bật nguồn đã được thiết lập để tự khởi động"
     cp geoip.dat /etc/XrayR/
     cp geosite.dat /etc/XrayR/ 
 
     if [[ ! -f /etc/XrayR/config.yml ]]; then
         cp config.yml /etc/XrayR/
         echo -e ""
-        echo -e "Cài đặt mới, vui lòng tham khảo hướng dẫn trước：https://github.com/AikoCute/XrayR，Định cấu hình nội dung cần thiết"
+        echo -e "Cài đặt mới, trước tiên hãy xem hướng dẫn: https://github.com/AikoCute/XrayR, cấu hình nội dung cần thiết"
     else
         systemctl start XrayR
         sleep 2
         check_status
         echo -e ""
         if [[ $? == 0 ]]; then
-            echo -e "${green}XrayR khởi động lại thành công${plain}"
+            echo -e "${green}Khởi động lại XrayR đã thành công${plain}"
         else
-            echo -e "${red}XrayR Có thể không khởi động được, vui lòng sử dụng sau XrayR log Kiểm tra thông tin nhật ký, nếu không khởi động được, định dạng cấu hình có thể đã bị thay đổi, vui lòng vào wiki để kiểm tra：https://github.com/herotbty/Aiko-XrayR/wiki${plain}"
+            echo -e "${red}XrayR có thể khởi động không thành công, vui lòng xem thông tin nhật ký sau bằng XrayR log và nếu bạn không thể khởi động, định dạng cấu hình có thể thay đổi, hãy truy cập wiki để xem: https://github.com/XrayR-project/XrayR/wiki${plain}"
         fi
     fi
 
@@ -173,7 +173,7 @@ install_XrayR() {
     fi
     curl -o /usr/bin/XrayR -Ls https://raw.githubusercontent.com/AikoCute/XrayR-release/master/XrayR.sh
     chmod +x /usr/bin/XrayR
-    ln -s /usr/bin/XrayR /usr/bin/xrayr # chữ thường tương thích
+    ln -s /usr/bin/XrayR /usr/bin/xrayr # Chữ thường tương thích
     chmod +x /usr/bin/xrayr
     echo -e ""
     echo "XrayR Cách sử dụng tập lệnh quản lý (tương thích với thực thi xrayr, không phân biệt chữ hoa chữ thường): "
@@ -197,7 +197,7 @@ install_XrayR() {
     echo "------------------------------------------"
 }
 
-echo -e "${green}bắt đầu cài đặt${plain}"
+echo -e "${green}Bắt đầu cài đặt${plain}"
 install_base
 install_acme
 install_XrayR $1
