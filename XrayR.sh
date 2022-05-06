@@ -115,7 +115,7 @@ update() {
     fi
 
     if [[ $# == 0 ]]; then
-        before_show_menub
+        before_show_menu
     fi
 }
 
