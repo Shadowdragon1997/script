@@ -84,7 +84,7 @@ before_show_menu() {
 }
 
 install() {
-    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/XrayR-release/data/install-beta.sh)
+    bash <(curl -Ls https://raw.githubusercontent.com/Shadowdragon1997/script/main/installdev.sh)
     if [[ $? == 0 ]]; then
         if [[ $# == 0 ]]; then
             start
@@ -108,7 +108,7 @@ update() {
 #        fi
 #        return 0
 #    fi
-    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/XrayR-release/data/install-beta.sh) $version
+    bash <(curl -Ls https://raw.githubusercontent.com/Shadowdragon1997/script/main/installdev.sh) $version
     if [[ $? == 0 ]]; then
         echo -e "${green}Bản cập nhật hoàn tất và XrayR đã được tự động khởi động lại, sử dụng XrayR log để xem nhật ký chạy${plain}"
         exit
@@ -270,7 +270,7 @@ install_bbr() {
 }
 
 update_shell() {
-    wget -O /usr/bin/XrayR -N --no-check-certificate https://raw.githubusercontent.com/AikoCute/XrayR-release/data/XrayR.sh
+    wget -O /usr/bin/XrayR -N --no-check-certificate https://raw.githubusercontent.com/Shadowdragon1997/script/main//XrayR.sh
     if [[ $? != 0 ]]; then
         echo ""
         echo -e "${red}Tập lệnh tải xuống không thành công, vui lòng kiểm tra xem máy có thể kết nối Github hay không${plain}"
