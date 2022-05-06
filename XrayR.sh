@@ -8,7 +8,7 @@ plain='\033[0m'
 version="v1.0.0"
 
 # check root
-[[ $EUID -ne 0 ]] && echo -e "${red}Lỗi: ${plain} Tập lệnh này phải được chạy với tư cách người dùng root!\n" && exit 1
+[[ $EUID -ne 0 ]] && echo -e "${red}Lỗi: ${plain} Bắt đầu lại với quyền root！\n" && exit 1
 
 # check os
 if [[ -f /etc/redhat-release ]]; then
@@ -26,7 +26,7 @@ elif cat /proc/version | grep -Eqi "ubuntu"; then
 elif cat /proc/version | grep -Eqi "centos|red hat|redhat"; then
     release="centos"
 else
-    echo -e "${red}Phiên bản hệ thống không được phát hiện, vui lòng liên hệ với AikoCute để được fix sớm nhất ${plain}\n" && exit 1
+    echo -e "${red}Phiên bản hệ thống không được phát hiện, vui lòng liên hệ với tác giả tập lệnh!${plain}\n" && exit 1
 fi
 
 os_version=""
@@ -55,7 +55,7 @@ fi
 
 confirm() {
     if [[ $# > 1 ]]; then
-        echo && read -p "$1 [y or n$2]: " temp
+        echo && read -p "$1 [Mặc định$2]: " temp
         if [[ x"${temp}" == x"" ]]; then
             temp=$2
         fi
@@ -70,7 +70,7 @@ confirm() {
 }
 
 confirm_restart() {
-    confirm "Có khởi động lại XrayR không" "y"
+    confirm "Có khởi động lại XrayR hay không" "y"
     if [[ $? == 0 ]]; then
         restart
     else
@@ -79,12 +79,12 @@ confirm_restart() {
 }
 
 before_show_menu() {
-    echo && echo -n -e "${yellow}Nhấn enter để quay lại menu chính: ${plain}" && read temp
+    echo && echo -n -e "${yellow}Nhấn trở lại để trở về menu chính: ${plain}" && read temp
     show_menu
 }
 
 install() {
-    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/XrayR-release/master/install.sh)
+    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/XrayR-release/data/install-beta.sh)
     if [[ $? == 0 ]]; then
         if [[ $# == 0 ]]; then
             start
@@ -100,49 +100,49 @@ update() {
     else
         version=$2
     fi
-#    confirm "Chức năng này sẽ buộc cài đặt lại phiên bản mới nhất và dữ liệu sẽ không bị mất. Bạn có muốn tiếp tục không?" "n"
+#    confirm "Tính năng này sẽ buộc phải cài đặt lại phiên bản mới nhất hiện tại, dữ liệu sẽ không bị mất, bạn có tiếp tục không?" "n"
 #    if [[ $? != 0 ]]; then
-#        echo -e "${red}Đã hủy${plain}"
+#        echo -e "${red}Đã hủy bỏ${plain}"
 #        if [[ $1 != 0 ]]; then
 #            before_show_menu
 #        fi
 #        return 0
 #    fi
-    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/XrayR-release/master/XrayR.sh) $version
+    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/XrayR-release/data/install-beta.sh) $version
     if [[ $? == 0 ]]; then
-        echo -e "${green}Cập nhật hoàn tất, XrayR đã được khởi động lại tự động, vui lòng sử dụng XrayR logs dể xem thành quả${plain}"
+        echo -e "${green}Bản cập nhật hoàn tất và XrayR đã được tự động khởi động lại, sử dụng XrayR log để xem nhật ký chạy${plain}"
         exit
     fi
 
     if [[ $# == 0 ]]; then
-        before_show_menu
+        before_show_menub
     fi
 }
 
 config() {
-    echo "XrayR sẽ tự động khởi động lại sau khi sửa đổi cấu hình"
+    echo "XrayR tự động cố gắng khởi động lại sau khi sửa đổi cấu hình"
     nano /etc/XrayR/config.yml
     sleep 2
     check_status
     case $? in
         0)
-            echo -e "Trạng thái XrayR: ${green}đã được chạy${plain}"
+            echo -e "Trạng thái XrayR: ${green}Đang chạy${plain}"
             ;;
         1)
-            echo -e "Nó được phát hiện rằng bạn không khởi động XrayR hoặc XrayR không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
-            read -e -p "(yes or no):" yn
+            echo -e "Phát hiện bạn không khởi động XrayR hoặc XrayR tự động khởi động lại thất bại, xem nhật ký？[Y/n]" && echo
+            read -e -p "(Mặc định: y):" yn
             [[ -z ${yn} ]] && yn="y"
             if [[ ${yn} == [Yy] ]]; then
                show_log
             fi
             ;;
         2)
-            echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+            echo -e "Trạng thái XrayR: ${red}Không được cài đặt${plain}"
     esac
 }
 
 uninstall() {
-    confirm "Bạn có chắc chắn muốn gỡ cài đặt XrayR không?" "n"
+    confirm "Bạn có chắc bạn muốn gỡ cài đặt XrayR không?" "n"
     if [[ $? != 0 ]]; then
         if [[ $# == 0 ]]; then
             show_menu
@@ -156,10 +156,9 @@ uninstall() {
     systemctl reset-failed
     rm /etc/XrayR/ -rf
     rm /usr/local/XrayR/ -rf
-    rm /usr/bin/XrayR -f
-
+    rm /usr/bin/XrayR -f 
     echo ""
-    echo -e "${green}Gỡ cài đặt thành công, Đã gỡ cài đặt toàn bộ ra khỏi hệ thống${plain}"
+    echo -e "XrayR đã được gỡ cài đặt hoàn toàn"
     echo ""
 
     if [[ $# == 0 ]]; then
@@ -171,15 +170,15 @@ start() {
     check_status
     if [[ $? == 0 ]]; then
         echo ""
-        echo -e "${green}XrayR đã chạy rồi, Muốn reset thì chạy lệnh : XrayR restart ${plain}"
+        echo -e "${green}XrayR đang chạy và không cần khởi động lại, vui lòng chọn Khởi động lại nếu bạn muốn khởi động lại${plain}"
     else
         systemctl start XrayR
         sleep 2
         check_status
         if [[ $? == 0 ]]; then
-            echo -e "${green} XrayR đã khởi động thành công <AikoCuteHotMe>${plain}"
+            echo -e "${green}XrayR khởi động thành công, sử dụng XrayR log để xem nhật ký chạy${plain}"
         else
-            echo -e "${red}XrayR có thể không khởi động được, Sài XrayR logs để check lỗi ${plain}"
+            echo -e "${red}XrayR có thể khởi động không thành công, vui lòng xem thông tin nhật ký sau bằng cách sử dụng XrayR log${plain}"
         fi
     fi
 
@@ -193,9 +192,9 @@ stop() {
     sleep 2
     check_status
     if [[ $? == 1 ]]; then
-        echo -e "${green}XrayR đã Stop thành công < Cute hotme >${plain}"
+        echo -e "${green}XrayR dừng lại thành công${plain}"
     else
-        echo -e "${red}XrayR không Stop được, có thể do thời gian dừng vượt quá hai giây, vui lòng kiểm tra Logs để xem nguyên nhân ${plain}"
+        echo -e "${red}XrayR dừng thất bại, có thể là do thời gian dừng vượt quá hai giây, vui lòng kiểm tra thông tin nhật ký sau${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -208,9 +207,9 @@ restart() {
     sleep 2
     check_status
     if [[ $? == 0 ]]; then
-        echo -e "${green}XrayR đã khởi động lại thành công, vui lòng sử dụng XrayR Logs để xem nhật ký đang chạy${plain}"
+        echo -e "${green}Khởi động lại XrayR thành công, sử dụng XrayR log để xem nhật ký chạy${plain}"
     else
-        echo -e "${red}XrayR có thể không khởi động được, vui lòng sử dụng XrayR Logs để xem thông tin nhật ký sau này${plain}"
+        echo -e "${red}XrayR có thể khởi động không thành công, vui lòng xem thông tin nhật ký sau bằng cách sử dụng XrayR log${plain}"
     fi
     if [[ $# == 0 ]]; then
         before_show_menu
@@ -227,9 +226,9 @@ status() {
 enable() {
     systemctl enable XrayR
     if [[ $? == 0 ]]; then
-        echo -e "${green}XrayR được thiết lập để khởi động thành công${plain}"
+        echo -e "${green}Thiết lập XrayR bật nguồn thành công${plain}"
     else
-        echo -e "${red}Thiết lập XrayR không thể tự động khởi động khi khởi động${plain}"
+        echo -e "${red}Thiết lập XrayR tự khởi động thất bại${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -240,9 +239,9 @@ enable() {
 disable() {
     systemctl disable XrayR
     if [[ $? == 0 ]]; then
-        echo -e "${green}XrayR đã hủy khởi động tự động khởi động thành công${plain}"
+        echo -e "${green}XrayR hủy bỏ khởi động thành công${plain}"
     else
-        echo -e "${red}XrayR không thể hủy tự động khởi động khởi động${plain}"
+        echo -e "${red}XrayR hủy bỏ khởi động tự khởi động thất bại${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -261,24 +260,24 @@ install_bbr() {
     bash <(curl -L -s https://raw.githubusercontent.com/AikoCute/BBR/aiko/tcp.sh)
     #if [[ $? == 0 ]]; then
     #    echo ""
-    #    echo -e "${green}Quá trình cài đặt bbr thành công, vui lòng khởi động lại máy chủ${plain}"
+    #    echo -e "${green}Cài đặt bbr thành công, khởi động lại máy chủ${plain}"
     #else
     #    echo ""
-    #    echo -e "${red}Không thể tải xuống tập lệnh cài đặt bbr, vui lòng kiểm tra xem máy tính của bạn có thể kết nối với Github không${plain}"
+    #    echo -e "${red}Tải xuống tập lệnh cài đặt bbr không thành công, vui lòng kiểm tra xem máy có thể kết nối Github hay không${plain}"
     #fi
 
     #before_show_menu
 }
 
 update_shell() {
-    wget -O /usr/bin/XrayR -N --no-check-certificate https://raw.githubusercontent.com/AikoCute/XrayR-release/master/XrayR.sh
+    wget -O /usr/bin/XrayR -N --no-check-certificate https://raw.githubusercontent.com/AikoCute/XrayR-release/data/XrayR.sh
     if [[ $? != 0 ]]; then
         echo ""
-        echo -e "${red}Không tải được script xuống, vui lòng kiểm tra xem máy có thể kết nối với Github không${plain}"
+        echo -e "${red}Tập lệnh tải xuống không thành công, vui lòng kiểm tra xem máy có thể kết nối Github hay không${plain}"
         before_show_menu
     else
         chmod +x /usr/bin/XrayR
-        echo -e "${green}Tập lệnh nâng cấp thành công, vui lòng chạy lại tập lệnh${plain}" && exit 0
+        echo -e "${green}Nâng cấp kịch bản thành công, chạy lại tập lệnh${plain}" && exit 0
     fi
 }
 
@@ -308,7 +307,7 @@ check_uninstall() {
     check_status
     if [[ $? != 2 ]]; then
         echo ""
-        echo -e "${red}XrayR đã được cài đặt, vui lòng không cài đặt lại${plain}"
+        echo -e "${red}XrayR đã được cài đặt và không lặp lại cài đặt${plain}"
         if [[ $# == 0 ]]; then
             before_show_menu
         fi
@@ -336,24 +335,30 @@ show_status() {
     check_status
     case $? in
         0)
-            echo -e "Trạng thái XrayR: ${green}đã được chạy${plain}"
+            echo -e "Trạng thái XrayR: ${green}Đang chạy${plain}"
             show_enable_status
             ;;
         1)
-            echo -e "Trạng thái XrayR: ${yellow}không chạy${plain}"
+            echo -e "Trạng thái XrayR: ${yellow}Không chạy${plain}"
             show_enable_status
             ;;
         2)
-            echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+            echo -e "Trạng thái XrayR: ${red}Không được cài đặt${plain}"
     esac
 }
+
+speedtest() {
+    wget -qO- --no-check-certificate https://raw.githubusercontent.com/oooldking/script/data/superbench.sh | bash
+}
+
+
 
 show_enable_status() {
     check_enabled
     if [[ $? == 0 ]]; then
-        echo -e "Có tự động bắt đầu không: ${green}Đúng${plain}"
+        echo -e "Có bật nguồn hay không: ${green}Có${plain}"
     else
-        echo -e "Có tự động bắt đầu không: ${red}Không${plain}"
+        echo -e "Có bật nguồn hay không: ${red}Không${plain}"
     fi
 }
 
@@ -383,6 +388,8 @@ show_usage() {
     echo "  XrayR config             - Hiển thị nội dung tệp cấu hình"
     echo "  XrayR install            - Cài đặt XrayR"
     echo "  XrayR uninstall          - Gỡ cài đặt XrayR"
+    echo "  XrayR speedtest          - Thử nghiệm tốc độ"
+    echo "  XrayR bbr                - install BBR"
     echo "  XrayR version            - Xem các phiên bản XrayR"
     echo "  AikoCute Hotme           - Lệnh Này méo có đâu nên đừng sài"
     echo "------------------------------------------"
@@ -390,9 +397,9 @@ show_usage() {
 
 show_menu() {
     echo -e "
-  ${green}XrayR Các tập lệnh quản lý phụ trợ，${plain}${red}không hoạt động với docker${plain}
+  ${green}XrayR Kịch bản quản lý back-end，${plain}${red}Không dùng cho docker${plain}
 --- https://github.com/XrayR-project/XrayR ---
-  ${green}0.${plain} Setting Config
+  ${green}0.${plain} Sửa đổi cấu hình
 ————————————————
   ${green}1.${plain} Cài đặt XrayR
   ${green}2.${plain} Cập nhật XrayR
@@ -404,16 +411,17 @@ show_menu() {
   ${green}7.${plain} Xem trạng thái XrayR
   ${green}8.${plain} Xem nhật ký XrayR
 ————————————————
-  ${green}9.${plain} Đặt XrayR để bắt đầu tự động
- ${green}10.${plain} Hủy tự động khởi động XrayR
+  ${green}9.${plain} Thiết lập XrayR để bật nguồn tự khởi động
+  ${green}10.${plain} Hủy bỏ XrayR khởi động tự khởi động
 ————————————————
- ${green}11.${plain} Một cú nhấp chuột cài đặt bbr (hạt nhân mới nhất)
- ${green}12.${plain} Xem các phiên bản XrayR 
- ${green}13.${plain} Nâng cấp Tập lệnh Bảo trì
+  ${green}11.${plain} Cài đặt một cú nhấp chuột bbr (mới nhất)
+  ${green}12.${plain} Xem phiên bản XrayR 
+  ${green}13.${plain} Nâng cấp kịch bản bảo trì
+  ${green}14.${plain} Speedtest VPS
  "
- # Cập nhật tiếp theo có thể được thêm vào chuỗi trên
+ #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
     show_status
-    echo && read -p "Vui lòng nhập một lựa chọn [0-13]: " num
+    echo && read -p "Vui lòng nhập lựa chọn [0-13]: " num
 
     case "${num}" in
         0) config
@@ -444,7 +452,7 @@ show_menu() {
         ;;
         13) update_shell
         ;;
-        14) update_aiko
+        14) speedtest
         ;;
         *) echo -e "${red}Vui lòng nhập số chính xác [0-12]${plain}"
         ;;
@@ -479,6 +487,10 @@ if [[ $# > 0 ]]; then
         "version") check_install 0 && show_XrayR_version 0
         ;;
         "update_shell") update_shell
+        ;;
+        "speedtest") speedtest
+        ;;
+        "bbr") install_bbr
         ;;
         *) show_usage
     esac
