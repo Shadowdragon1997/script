@@ -177,7 +177,7 @@ install_XrayR() {
     chmod +x /usr/bin/xrayr
     
 #settings CertFile và KeyFile
-read -p "Vui lòng chọn config cấu hình: " choose_node
+read -p "Vui lòng chọn config CertFile và KeyFile: " choose_node
 
 if [ "$choose_node" == "quabnv_1" ]; then
       wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/quabnv/pem/vt1/vt1.pem -O /etc/XrayR/server.pem
@@ -186,6 +186,34 @@ if [ "$choose_node" == "quabnv_1" ]; then
 elif [ "$choose_node" == "quabnv_2" ]; then
       wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/quabnv/pem/vt2/vt2.pem -O /etc/XrayR/server.pem
       wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/quabnv/pem/vt2/vt2.privkey.pem -O /etc/XrayR/privkey.pem
+      
+elif [ "$choose_node" == "khoa_1" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt1/vt1.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt1/vt1.privkey.pem -O /etc/XrayR/privkey.pem
+      
+elif [ "$choose_node" == "khoa_2" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt2/vt2.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt2/vt2.privkey.pem -O /etc/XrayR/privkey.pem
+
+elif [ "$choose_node" == "khoa_3" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt3/vt3.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt3/vt3.privkey.pem -O /etc/XrayR/privkey.pem
+
+elif [ "$choose_node" == "khoa_4" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt4/vt4.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt4/vt4.privkey.pem -O /etc/XrayR/privkey.pem
+      
+elif [ "$choose_node" == "khoa_5" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt5/vt5.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt5/vt5.privkey.pem -O /etc/XrayR/privkey.pem
+
+elif [ "$choose_node" == "khoa_6" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt6/vt6.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt6/vt6.privkey.pem -O /etc/XrayR/privkey.pem
+      
+elif [ "$choose_node" == "khoa_7" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt7/vt7.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt7/vt7.privkey.pem -O /etc/XrayR/privkey.pem
       
 fi
 
@@ -199,6 +227,10 @@ fi
     read -p "ApiHost của bạn là (link website):" idhost
         echo "---------------"
     read -p "ApiKey của bạn là :" idkey
+        echo "---------------"
+    read -p "Tốc độ mà bạn muốn giới hạn là :" numberspeed
+        echo "---------------"
+    read -p "Số lượng thiết bị giới hạn có thể sử dụng là :" numberdevice
         echo "---------------"
 
 	rm -f /etc/XrayR/config.yml
@@ -233,8 +265,8 @@ Nodes:
       Timeout: 30 # Timeout for the api request
       EnableVless: false # Enable Vless for V2ray Type
       EnableXTLS: false # Enable XTLS for V2ray and Trojan
-      SpeedLimit: 0 # Mbps, Local settings will replace remote settings, 0 means disable
-      DeviceLimit: 1 # Local settings will replace remote settings, 0 means disable
+      SpeedLimit: $numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
+      DeviceLimit: $numberdevice # Local settings will replace remote settings, 0 means disable
       RuleListPath: # ./rulelist Path to local rulelist file
     ControllerConfig:
       ListenIP: 0.0.0.0 # IP address you want to listen
@@ -274,8 +306,8 @@ Nodes:
       Timeout: 30 # Timeout for the api request
       EnableVless: false # Enable Vless for V2ray Type
       EnableXTLS: false # Enable XTLS for V2ray and Trojan
-      SpeedLimit: 0 # Mbps, Local settings will replace remote settings, 0 means disable
-      DeviceLimit: 1 # Local settings will replace remote settings, 0 means disable
+      SpeedLimit: $numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
+      DeviceLimit: $numberdevice # Local settings will replace remote settings, 0 means disable
       RuleListPath: # ./rulelist Path to local rulelist file
     ControllerConfig:
       ListenIP: 0.0.0.0 # IP address you want to listen
