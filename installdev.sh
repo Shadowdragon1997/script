@@ -218,19 +218,19 @@ elif [ "$choose_node" == "khoa_7" ]; then
 fi
 
 #settings config file
-    read -p "Số node ID Trojan :" idtrojan
+    read -p "Số node ID Trojan: " Idtrojan
 	echo "---------------"
-    read -p "Số node ID Vmess :" idvmess
+    read -p "Số node ID Vmess: " Idvmess
 	echo "---------------"
-    read -p "CertDomain của bạn là (tên miền trỏ IP Server) :" CertDomain
+    read -p "CertDomain của bạn là (tên miền trỏ IP Server): " CertDomain
 	echo "---------------"
-    read -p "ApiHost của bạn là (link website):" idhost
+    read -p "ApiHost của bạn là (link website): " ApiHost
         echo "---------------"
-    read -p "ApiKey của bạn là :" idkey
+    read -p "ApiKey của bạn là: " ApiKey
         echo "---------------"
-    read -p "Tốc độ mà bạn muốn giới hạn là :" numberspeed
+    read -p "Tốc độ mà bạn muốn giới hạn là: " Numberspeed
         echo "---------------"
-    read -p "Số lượng thiết bị giới hạn có thể sử dụng là :" numberdevice
+    read -p "Số lượng thiết bị giới hạn có thể sử dụng là: " Numberdevice
         echo "---------------"
 
 	rm -f /etc/XrayR/config.yml
@@ -258,16 +258,16 @@ Nodes:
   -
     PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, Proxypanel
     ApiConfig:
-      ApiHost: "$idhost"
-      ApiKey: "$idkey"
-      NodeID: $idtrojan
+      ApiHost: "$ApiHost"
+      ApiKey: "$ApiKey"
+      NodeID: $Idtrojan
       NodeType: Trojan # Node type: V2ray, Trojan, Shadowsocks, Shadowsocks-Plugin
       Timeout: 30 # Timeout for the api request
       EnableVless: false # Enable Vless for V2ray Type
       EnableXTLS: false # Enable XTLS for V2ray and Trojan
-      SpeedLimit: $numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
-      DeviceLimit: $numberdevice # Local settings will replace remote settings, 0 means disable
-      RuleListPath: # ./rulelist Path to local rulelist file
+      SpeedLimit: $Numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
+      DeviceLimit: $Numberdevice # Local settings will replace remote settings, 0 means disable
+      RuleListPath: # /etc/XrayR/rulelist Path to local rulelist file
     ControllerConfig:
       ListenIP: 0.0.0.0 # IP address you want to listen
       SendIP: 0.0.0.0 # IP address you want to send pacakage
@@ -299,16 +299,16 @@ Nodes:
   -
     PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, Proxypanel
     ApiConfig:
-      ApiHost: "$idhost"
-      ApiKey: "$idkey"
-      NodeID: $idvmess
+      ApiHost: "$ApiHost"
+      ApiKey: "$ApiKey"
+      NodeID: $Idvmess
       NodeType: V2ray # Node type: V2ray, Trojan, Shadowsocks, Shadowsocks-Plugin
       Timeout: 30 # Timeout for the api request
       EnableVless: false # Enable Vless for V2ray Type
       EnableXTLS: false # Enable XTLS for V2ray and Trojan
-      SpeedLimit: $numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
-      DeviceLimit: $numberdevice # Local settings will replace remote settings, 0 means disable
-      RuleListPath: # ./rulelist Path to local rulelist file
+      SpeedLimit: $Numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
+      DeviceLimit: $Numberdevice # Local settings will replace remote settings, 0 means disable
+      RuleListPath: # /etc/XrayR/rulelist Path to local rulelist file
     ControllerConfig:
       ListenIP: 0.0.0.0 # IP address you want to listen
       SendIP: 0.0.0.0 # IP address you want to send pacakage
