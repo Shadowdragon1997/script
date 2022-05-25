@@ -177,10 +177,10 @@ install_XrayR() {
     chmod +x /usr/bin/xrayr
     
 #settings CertFile và KeyFile
-echo -e " Nhập đường link CertFile"
-echo -e "-------------------------"
-echo -e " Nhập đường link KeyFile"
-echo -e "-------------------------"
+     read -p "Link tạo CertFile :" 
+        echo "---------------"
+      read -p "Link tạo KeyFile :"
+        echo "---------------"
 
 #settings config file
     read -p "Số node ID Trojan :" idtrojan
