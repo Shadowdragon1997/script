@@ -175,25 +175,130 @@ install_XrayR() {
     chmod +x /usr/bin/XrayR
     ln -s /usr/bin/XrayR /usr/bin/xrayr # Chữ thường tương thích
     chmod +x /usr/bin/xrayr
+
+#settings config file
+    read -p "Số node ID Trojan :" idtrojan
+	echo "---------------"
+    read -p "Số node ID Vmess :" idvmess
+	echo "---------------"
+    read -p "CertDomain của bạn là :" CertDomain
+	echo "---------------"
+    read -p "ApiHost của bạn là :" idhost
+        echo "---------------"
+    read -p "ApiKey của bạn là :" idkey
+        echo "---------------"
+
+	rm -f /etc/XrayR/config.yml
+	if [[ -z $(~/.acme.sh/acme.sh -v 2>/dev/null) ]]; then
+		curl https://get.acme.sh | sh -s email=script@github.com
+		source ~/.bashrc
+		bash ~/.acme.sh/acme.sh --upgrade --auto-upgrade
+	fi
+         cat <<EOF >/etc/XrayR/config.yml
+Log:
+  Level: warning # Log level: none, error, warning, info, debug 
+  AccessPath: # /etc/XrayR/access.Log
+  ErrorPath: # /etc/XrayR/error.log
+DnsConfigPath: # /etc/XrayR/dns.json # Path to dns config, check https://xtls.github.io/config/dns.html for help
+RouteConfigPath: # /etc/XrayR/route.json # Path to route config, check https://xtls.github.io/config/routing.html for help
+InboundConfigPath: # /etc/XrayR/custom_inbound.json # Path to custom inbound config, check https://xtls.github.io/config/inbound.html for help
+OutboundConfigPath: # /etc/XrayR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/outbound.html for help
+ConnetionConfig:
+  Handshake: 4 # Handshake time limit, Second
+  ConnIdle: 30 # Connection idle time limit, Second
+  UplinkOnly: 2 # Time limit when the connection downstream is closed, Second
+  DownlinkOnly: 4 # Time limit when the connection is closed after the uplink is closed, Second
+  BufferSize: 64 # The internal cache size of each connection, kB 
+Nodes:
+  -
+    PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, Proxypanel
+    ApiConfig:
+      ApiHost: "$idhost"
+      ApiKey: "$idkey"
+      NodeID: $idtrojan
+      NodeType: Trojan # Node type: V2ray, Trojan, Shadowsocks, Shadowsocks-Plugin
+      Timeout: 30 # Timeout for the api request
+      EnableVless: false # Enable Vless for V2ray Type
+      EnableXTLS: false # Enable XTLS for V2ray and Trojan
+      SpeedLimit: 0 # Mbps, Local settings will replace remote settings, 0 means disable
+      DeviceLimit: 1 # Local settings will replace remote settings, 0 means disable
+      RuleListPath: # ./rulelist Path to local rulelist file
+    ControllerConfig:
+      ListenIP: 0.0.0.0 # IP address you want to listen
+      SendIP: 0.0.0.0 # IP address you want to send pacakage
+      UpdatePeriodic: 60 # Time to update the nodeinfo, how many sec.
+      EnableDNS: false # Use custom DNS config, Please ensure that you set the dns.json well
+      DNSType: AsIs # AsIs, UseIP, UseIPv4, UseIPv6, DNS strategy
+      DisableUploadTraffic: false # Disable Upload Traffic to the panel
+      DisableGetRule: false # Disable Get Rule from the panel
+      DisableIVCheck: false # Disable the anti-reply protection for Shadowsocks
+      DisableSniffing: true # Disable domain sniffing 
+      EnableProxyProtocol: false # Only works for WebSocket and TCP
+      EnableFallback: false # Only support for Trojan and Vless
+      FallBackConfigs:  # Support multiple fallbacks
+        -
+          SNI: # TLS SNI(Server Name Indication), Empty for any
+          Path: # HTTP PATH, Empty for any
+          Dest: 80 # Required, Destination of fallback, check https://xtls.github.io/config/fallback/ for details.
+          ProxyProtocolVer: 0 # Send PROXY protocol version, 0 for dsable
+      CertConfig:
+        CertMode: file # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
+        CertDomain: "$CertDomain" # Domain to cert
+        CertFile: /etc/XrayR/server.pem # Provided if the CertMode is file
+        KeyFile: /etc/XrayR/privkey.pem
+        Provider: cloudflare # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
+        Email: nguyendovietkhoa@gmail.com
+        DNSEnv: # DNS ENV option used by DNS provider
+          CLOUDFLARE_EMAIL: nguyendovietkhoa@gmail.com
+          CLOUDFLARE_API_KEY: 13b94cc24f9c0f6a56112df9b1abb79808bbd
+  -
+    PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, Proxypanel
+    ApiConfig:
+      ApiHost: "$idhost"
+      ApiKey: "$idkey"
+      NodeID: $idvmess
+      NodeType: V2ray # Node type: V2ray, Trojan, Shadowsocks, Shadowsocks-Plugin
+      Timeout: 30 # Timeout for the api request
+      EnableVless: false # Enable Vless for V2ray Type
+      EnableXTLS: false # Enable XTLS for V2ray and Trojan
+      SpeedLimit: 0 # Mbps, Local settings will replace remote settings, 0 means disable
+      DeviceLimit: 1 # Local settings will replace remote settings, 0 means disable
+      RuleListPath: # ./rulelist Path to local rulelist file
+    ControllerConfig:
+      ListenIP: 0.0.0.0 # IP address you want to listen
+      SendIP: 0.0.0.0 # IP address you want to send pacakage
+      UpdatePeriodic: 60 # Time to update the nodeinfo, how many sec.
+      EnableDNS: false # Use custom DNS config, Please ensure that you set the dns.json well
+      DNSType: AsIs # AsIs, UseIP, UseIPv4, UseIPv6, DNS strategy
+      DisableUploadTraffic: false # Disable Upload Traffic to the panel
+      DisableGetRule: false # Disable Get Rule from the panel
+      DisableIVCheck: false # Disable the anti-reply protection for Shadowsocks
+      DisableSniffing: true # Disable domain sniffing 
+      EnableProxyProtocol: false # Only works for WebSocket and TCP
+      EnableFallback: false # Only support for Trojan and Vless
+      FallBackConfigs:  # Support multiple fallbacks
+        -
+          SNI: # TLS SNI(Server Name Indication), Empty for any
+          Path: # HTTP PATH, Empty for any
+          Dest: 80 # Required, Destination of fallback, check https://xtls.github.io/config/fallback/ for details.
+          ProxyProtocolVer: 0 # Send PROXY protocol version, 0 for dsable
+      CertConfig:
+        CertMode: file # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
+        CertDomain: "$CertDomain" # Domain to cert
+        CertFile: /root/cert/server.pem # Provided if the CertMode is file
+        KeyFile: /root/cert/privkey.pem
+        Provider: cloudflare # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
+        Email: nguyendovietkhoa@gmail.com
+        DNSEnv: # DNS ENV option used by DNS provider
+          CLOUDFLARE_EMAIL: nguyendovietkhoa@gmail.com
+          CLOUDFLARE_API_KEY: 13b94cc24f9c0f6a56112df9b1abb79808bbd
+EOF
+
     echo -e ""
-    echo "XrayR Cách sử dụng tập lệnh quản lý (tương thích với thực thi xrayr, không phân biệt chữ hoa chữ thường): "
-    echo "Aiko-XrayR Supported Zalo And fix Vmess"
+    echo "  Cách sử dụng tập lệnh quản lý XrayR     " 
     echo "------------------------------------------"
-    echo "  XrayR                    - Hiển thị menu quản lý (nhiều chức năng hơn)"
-    echo "  XrayR start              - Khởi động XrayR"
-    echo "  XrayR stop               - Dừng XrayR"
-    echo "  XrayR restart            - Khởi động lại XrayR"
-    echo "  XrayR status             - Kiểm tra trạng thái XrayR"
-    echo "  XrayR enable             - Kích hoạt XrayR"
-    echo "  XrayR disable            - Hủy tự động khởi động XrayR"
-    echo "  XrayR log                - Xem nhật ký XrayR"
-    echo "  XrayR update             - Cập nhật XrayR"
-    echo "  XrayR update x.x.x       - Cập nhật phiên bản được chỉ định XrayR"
-    echo "  XrayR config             - Hiển thị nội dung tệp cấu hình"
-    echo "  XrayR install            - Cài đặt XrayR"
-    echo "  XrayR uninstall          - Gỡ cài đặt XrayR"
-    echo "  XrayR version            - Xem các phiên bản XrayR"
-    echo "  AikoCute Hotme           - Lệnh Này méo có đâu nên đừng sài"
+    echo "           XrayR   - Show admin menu      "
+    echo "         AikoXrayR - XrayR by AikoCute    "
     echo "------------------------------------------"
 }
 
