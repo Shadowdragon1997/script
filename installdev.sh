@@ -175,15 +175,21 @@ install_XrayR() {
     chmod +x /usr/bin/XrayR
     ln -s /usr/bin/XrayR /usr/bin/xrayr # Chữ thường tương thích
     chmod +x /usr/bin/xrayr
+    
+#settings CertFile và KeyFile
+echo -e " Nhập đường link CertFile"
+echo -e "-------------------------"
+echo -e " Nhập đường link KeyFile"
+echo -e "-------------------------"
 
 #settings config file
     read -p "Số node ID Trojan :" idtrojan
 	echo "---------------"
     read -p "Số node ID Vmess :" idvmess
 	echo "---------------"
-    read -p "CertDomain của bạn là :" CertDomain
+    read -p "CertDomain của bạn là (tên miền trỏ IP Server) :" CertDomain
 	echo "---------------"
-    read -p "ApiHost của bạn là :" idhost
+    read -p "ApiHost của bạn là (link website):" idhost
         echo "---------------"
     read -p "ApiKey của bạn là :" idkey
         echo "---------------"
@@ -285,8 +291,8 @@ Nodes:
       CertConfig:
         CertMode: file # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
         CertDomain: "$CertDomain" # Domain to cert
-        CertFile: /root/cert/server.pem # Provided if the CertMode is file
-        KeyFile: /root/cert/privkey.pem
+        CertFile: /etc/XrayR/server.pem # Provided if the CertMode is file
+        KeyFile: /etc/XrayR/privkey.pem
         Provider: cloudflare # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
         Email: nguyendovietkhoa@gmail.com
         DNSEnv: # DNS ENV option used by DNS provider
