@@ -367,9 +367,11 @@ generate_config_file() {
             4 ) PanelType="Proxypanel" ;;
             * ) PanelType="SSpanel" ;;
         esac
-        read -p "Vui lòng nhập APIHost：" ApiHost
+        read -p "Vui lòng nhập ApiHost (link website)：" ApiHost
         read -p "Vui lòng Apikey：" ApiKey
-        read -p "Vui lòng nhập ID nút:" NodeID
+        read -p "Vui lòng nhập ID nút: " NodeID
+        read -p "Tốc độ mà bạn muốn giới hạn là: " Numberspeed
+        read -p "Số lượng thiết bị giới hạn có thể sử dụng là :" Numberdevice
         echo -e "${yellow}Vui lòng chọn một giao thức truyền tải nút, nếu không được liệt kê thì nó không được hỗ trợ：${plain}"
         echo -e "${green}1. Shadowsocks ${plain}"
         echo -e "${green}2. Shadowsocks-Plugin ${plain}"
@@ -411,8 +413,8 @@ Nodes:
       Timeout: 30 # Timeout for the api request
       EnableVless: false # Enable Vless for V2ray Type
       EnableXTLS: false # Enable XTLS for V2ray and Trojan
-      SpeedLimit: 0 # Mbps, Local settings will replace remote settings, 0 means disable
-      DeviceLimit: 0 # Local settings will replace remote settings, 0 means disable
+      SpeedLimit: $Numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
+      DeviceLimit: $Numberdevice # Local settings will replace remote settings, 0 means disable
       RuleListPath: # /etc/XrayR/rulelist Path to local rulelist file
     ControllerConfig:
       ListenIP: 0.0.0.0 # IP address you want to listen
@@ -420,6 +422,10 @@ Nodes:
       UpdatePeriodic: 60 # Time to update the nodeinfo, how many sec.
       EnableDNS: false # Use custom DNS config, Please ensure that you set the dns.json well
       DNSType: AsIs # AsIs, UseIP, UseIPv4, UseIPv6, DNS strategy
+      DisableUploadTraffic: false # Disable Upload Traffic to the panel
+      DisableGetRule: false # Disable Get Rule from the panel
+      DisableIVCheck: false # Disable the anti-reply protection for Shadowsocks
+      DisableSniffing: true # Disable domain sniffing
       EnableProxyProtocol: false # Only works for WebSocket and TCP
       EnableFallback: false # Only support for Trojan and Vless
       FallBackConfigs:  # Support multiple fallbacks
@@ -429,15 +435,15 @@ Nodes:
           Dest: 80 # Required, Destination of fallback, check https://xtls.github.io/config/fallback/ for details.
           ProxyProtocolVer: 0 # Send PROXY protocol version, 0 for dsable
       CertConfig:
-        CertMode: dns # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
-        CertDomain: "node1.test.com" # Domain to cert
-        CertFile: /etc/XrayR/cert/node1.test.com.cert # Provided if the CertMode is file
-        KeyFile: /etc/XrayR/cert/node1.test.com.key
-        Provider: alidns # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
-        Email: test@me.com
+        CertMode: file # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
+        CertDomain: "$CertDomain" # Domain to cert
+        CertFile: /etc/XrayR/server.pem # Provided if the CertMode is file
+        KeyFile: /etc/XrayR/privkey.pem
+        Provider: cloudflare # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
+        Email: nguyendovietkhoa@gmail.com
         DNSEnv: # DNS ENV option used by DNS provider
-          ALICLOUD_ACCESS_KEY: aaa
-          ALICLOUD_SECRET_KEY: bbb
+          CLOUDFLARE_EMAIL: nguyendovietkhoa@gmail.com
+          CLOUDFLARE_API_KEY: 13b94cc24f9c0f6a56112df9b1abb79808bbd
 EOF
         echo -e "${green}Tạo tệp cấu hình AikoXrayR hoàn tất, khởi động lại dịch vụ AikoXrayR${plain}"
         xrayr restart
