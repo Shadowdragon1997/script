@@ -96,7 +96,7 @@ update() {
     else
         version=$2
     fi
-    bash <(curl -Ls https://raw.githubusercontent.com/Shadowdragon1997/script/main/installdev.sh) $version
+    bash <(curl -Ls https://raw.githubusercontent.com/Shadowdragon1997/script/main/updatedev.sh) $version
     if [[ $? == 0 ]]; then
         echo -e "${green}Cập nhật hoàn tất, AikoXrayR đã được khởi động lại tự động, vui lòng sử dụng nhật ký XrayR để xem nhật ký chạy${plain}"
         exit
