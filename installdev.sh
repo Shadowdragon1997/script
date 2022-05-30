@@ -215,6 +215,10 @@ elif [ "$choose_node" == "khoa_7" ]; then
       wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt7/vt7.pem -O /etc/XrayR/server.pem
       wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt7/vt7.privkey.pem -O /etc/XrayR/privkey.pem
       
+elif [ "$choose_node" == "khoa_8" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt8/vt8.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/vt8/vt8.privkey.pem -O /etc/XrayR/privkey.pem
+      
 fi
 
 #settings config file
