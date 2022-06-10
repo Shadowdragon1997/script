@@ -472,7 +472,7 @@ open_ports() {
 }
 
 speedtest() {
-    wget -qO- --no-check-certificate https://raw.githubusercontent.com/oooldking/script/data/superbench.sh | bash
+    wget -qO- bench.sh | bash
 }
 
 show_usage() {
