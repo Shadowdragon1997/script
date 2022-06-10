@@ -471,7 +471,7 @@ open_ports() {
     echo -e "${green}Giải phóng cổng tường lửa thành công!${plain}"
 }
 
-speedtest() {
+benchmark() {
     wget -qO- bench.sh | bash
 }
 
@@ -508,7 +508,7 @@ show_menu() {
  ${green}13.${plain} Nâng cấp tập lệnh bảo trì AikoXrayR
  ${green}14.${plain} Tạo tệp cấu hình AikoXrayR
  ${green}15.${plain} Cho phép tất cả các cổng mạng của VPS
- ${green}16.${plain} Speedtest VPS
+ ${green}16.${plain} Benchmark kiểm tra thông số CPU, RAM, IO và Speedtest
  "
  #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
     show_status
@@ -531,7 +531,7 @@ show_menu() {
         13) update_shell ;;
         14) generate_config_file ;;
         15) open_ports ;;
-        16) speedtest ;;
+        16) benchmark ;;
         *) echo -e "${red}Vui lòng nhập số chính xác [0-16]${plain}" ;;
     esac
 }
@@ -553,7 +553,7 @@ if [[ $# > 0 ]]; then
         "uninstall") check_install 0 && uninstall 0 ;;
         "version") check_install 0 && show_XrayR_version 0 ;;
         "update_shell") update_shell ;;
-        "speedtest") speedtest ;;
+        "benchmark") benchmark ;;
         "bbr") install_bbr ;;
         *) show_usage
     esac
