@@ -471,6 +471,10 @@ open_ports() {
     echo -e "${green}Giải phóng cổng tường lửa thành công!${plain}"
 }
 
+speedtest() {
+    wget -qO- --no-check-certificate https://raw.githubusercontent.com/oooldking/script/data/superbench.sh | bash
+}
+
 show_usage() {
     echo -e ""
     echo "  Cách sử dụng tập lệnh quản lý XrayR     " 
@@ -504,10 +508,11 @@ show_menu() {
  ${green}13.${plain} Nâng cấp tập lệnh bảo trì AikoXrayR
  ${green}14.${plain} Tạo tệp cấu hình AikoXrayR
  ${green}15.${plain} Cho phép tất cả các cổng mạng của VPS
+ ${green}16.${plain} Speedtest VPS
  "
  #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
     show_status
-    echo && read -p "Vui lòng nhập một lựa chọn [0-14]: " num
+    echo && read -p "Vui lòng nhập một lựa chọn [0-16]: " num
 
     case "${num}" in
         0) config ;;
@@ -526,7 +531,8 @@ show_menu() {
         13) update_shell ;;
         14) generate_config_file ;;
         15) open_ports ;;
-        *) echo -e "${red}Vui lòng nhập số chính xác [0-14]${plain}" ;;
+        16) speedtest ;;
+        *) echo -e "${red}Vui lòng nhập số chính xác [0-16]${plain}" ;;
     esac
 }
 
@@ -547,6 +553,8 @@ if [[ $# > 0 ]]; then
         "uninstall") check_install 0 && uninstall 0 ;;
         "version") check_install 0 && show_XrayR_version 0 ;;
         "update_shell") update_shell ;;
+        "speedtest") speedtest ;;
+        "bbr") install_bbr ;;
         *) show_usage
     esac
 else
