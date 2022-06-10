@@ -218,7 +218,19 @@ elif [ "$choose_node" == "khoa_7" ]; then
 elif [ "$choose_node" == "khoa_gaming_1" ]; then
       wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/gaming1/gaming1.pem -O /etc/XrayR/server.pem
       wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/gaming1/gaming1.privkey.pem -O /etc/XrayR/privkey.pem
-      
+
+elif [ "$choose_node" == "khoa_gaming_2" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/gaming2/gaming2.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/gaming2/gaming2.privkey.pem -O /etc/XrayR/privkey.pem
+
+elif [ "$choose_node" == "khoa_gaming_3" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/gaming3/gaming3.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/gaming3/gaming3.privkey.pem -O /etc/XrayR/privkey.pem
+
+elif [ "$choose_node" == "khoa_gaming_4" ]; then
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/gaming4/gaming4.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/Shadowdragon1997/pem_key/anhkhoa/pem/gaming4/gaming4.privkey.pem -O /etc/XrayR/privkey.pem
+
 fi
 
 #settings config file
