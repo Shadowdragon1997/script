@@ -115,41 +115,41 @@ install_XrayR() {
             exit 1
         fi
         echo -e "Phiên bản mới nhất của XrayR đã được phát hiện：${last_version}，Bắt đầu cài đặt"
-        wget -N --no-check-certificate -O /usr/local/XrayR/XrayR-linux.zip https://github.com/AikoXrayR-Project/XrayR/releases/download/${last_version}/XrayR-linux-${arch}.zip
+        wget -N --no-check-certificate -O /usr/local/XrayR/AikoXrayR-linux.zip https://github.com/AikoXrayR-Project/XrayR/releases/download/${last_version}/AikoXrayR-linux-${arch}.zip
         if [[ $? -ne 0 ]]; then
             echo -e "${red}Tải xuống XrayR thất bại, hãy chắc chắn rằng máy chủ của bạn có thể tải về các tập tin Github${plain}"
             exit 1
         fi
     else
         last_version=$1
-        url="https://github.com/AikoXrayR-Project/XrayR/releases/download/${last_version}/XrayR-linux-${arch}.zip"
+        url="https://github.com/AikoXrayR-Project/XrayR/releases/download/${last_version}/AikoXrayR-linux-${arch}.zip"
         echo -e "Bắt đầu cài đặt XrayR v$1"
-        wget -N --no-check-certificate -O /usr/local/XrayR/XrayR-linux.zip ${url}
+        wget -N --no-check-certificate -O /usr/local/XrayR/AikoXrayR-linux.zip ${url}
         if [[ $? -ne 0 ]]; then
             echo -e "${red}Tải xuống XrayR v$1 Thất bại, hãy chắc chắn rằng phiên bản này tồn tại${plain}"
             exit 1
         fi
     fi
 
-    unzip XrayR-linux.zip
-    rm XrayR-linux.zip -f
+    unzip AikoXrayR-linux.zip
+    rm AikoXrayR-linux.zip -f
     chmod +x XrayR
     mkdir /etc/XrayR/ -p
     rm /etc/systemd/system/XrayR.service -f
-    file="https://github.com/AikoXrayR-Project/AikoXrayR-install/raw/data/XrayR.service"
+    file="https://raw.githubusercontent.com/AikoXrayR-Project/AikoXrayR-install/dev/XrayR.service"
     wget -N --no-check-certificate -O /etc/systemd/system/XrayR.service ${file}
     #cp -f XrayR.service /etc/systemd/system/
     systemctl daemon-reload
     systemctl stop XrayR
     systemctl enable XrayR
-    echo -e "${green}XrayR ${last_version}${plain} Quá trình cài đặt hoàn tất và bật nguồn đã được thiết lập để tự khởi động"
+    echo -e "${green}XrayR ${last_version}${plain} Quá trình cài đặt hoàn tất, nó đã được thiết lập để bắt đầu tự động"
     cp geoip.dat /etc/XrayR/
     cp geosite.dat /etc/XrayR/ 
 
-    if [[ ! -f /etc/XrayR/config.yml ]]; then
-        cp config.yml /etc/XrayR/
+    if [[ ! -f /etc/XrayR/aiko.yml ]]; then
+        cp aiko.yml /etc/XrayR/
         echo -e ""
-        echo -e "Cài đặt mới, trước tiên hãy xem hướng dẫn: https://github.com/AikoXrayR-Project, cấu hình nội dung cần thiết"
+        echo -e "Cài đặt mới, vui lòng tham khảo hướng dẫn trước：https://github.com/AikoCute/XrayR，Định cấu hình nội dung cần thiết"
     else
         systemctl start XrayR
         sleep 2
