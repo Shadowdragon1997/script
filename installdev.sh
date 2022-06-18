@@ -249,13 +249,13 @@ fi
     read -p "Số lượng thiết bị giới hạn có thể sử dụng là: " Numberdevice
         echo "---------------"
 
-	rm -f /etc/XrayR/config.yml
+	rm -f /etc/XrayR/aiko.yml
 	if [[ -z $(~/.acme.sh/acme.sh -v 2>/dev/null) ]]; then
 		curl https://get.acme.sh | sh -s email=script@github.com
 		source ~/.bashrc
 		bash ~/.acme.sh/acme.sh --upgrade --auto-upgrade
 	fi
-         cat <<EOF >/etc/XrayR/config.yml
+         cat <<EOF >/etc/XrayR/aiko.yml
 Log:
   Level: warning # Log level: none, error, warning, info, debug 
   AccessPath: # /etc/XrayR/access.Log
@@ -293,7 +293,6 @@ Nodes:
       DisableUploadTraffic: false # Disable Upload Traffic to the panel
       DisableGetRule: false # Disable Get Rule from the panel
       DisableIVCheck: false # Disable the anti-reply protection for Shadowsocks
-      DisableSniffing: true # Disable domain sniffing 
       EnableProxyProtocol: false # Only works for WebSocket and TCP
       EnableFallback: false # Only support for Trojan and Vless
       FallBackConfigs:  # Support multiple fallbacks
@@ -334,7 +333,6 @@ Nodes:
       DisableUploadTraffic: false # Disable Upload Traffic to the panel
       DisableGetRule: false # Disable Get Rule from the panel
       DisableIVCheck: false # Disable the anti-reply protection for Shadowsocks
-      DisableSniffing: true # Disable domain sniffing 
       EnableProxyProtocol: false # Only works for WebSocket and TCP
       EnableFallback: false # Only support for Trojan and Vless
       FallBackConfigs:  # Support multiple fallbacks
