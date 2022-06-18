@@ -109,7 +109,7 @@ update() {
 
 config() {
     echo "AikoXrayR sẽ tự động khởi động lại sau khi sửa đổi cấu hình"
-    vi /etc/XrayR/config.yml
+    vi /etc/XrayR/aiko.yml
     sleep 2
     check_status
     case $? in
@@ -386,8 +386,8 @@ generate_config_file() {
             * ) NodeType="Shadowsocks" ;;
         esac
         cd /etc/XrayR
-        mv config.yml config.yml.bak
-        cat <<EOF > /etc/XrayR/config.yml
+        mv aiko.yml aiko.yml.bak
+        cat <<EOF > /etc/XrayR/aiko.yml
 Log:
   Level: warning # Log level: none, error, warning, info, debug 
   AccessPath: # /etc/XrayR/access.Log
@@ -415,7 +415,7 @@ Nodes:
       EnableXTLS: false # Enable XTLS for V2ray and Trojan
       SpeedLimit: $Numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
       DeviceLimit: $Numberdevice # Local settings will replace remote settings, 0 means disable
-      RuleListPath: # /etc/XrayR/rulelist Path to local rulelist file
+      RuleListPath: # /etc/XrayR/AikoBlock Path to local rulelist file
     ControllerConfig:
       ListenIP: 0.0.0.0 # IP address you want to listen
       SendIP: 0.0.0.0 # IP address you want to send pacakage
@@ -425,7 +425,6 @@ Nodes:
       DisableUploadTraffic: false # Disable Upload Traffic to the panel
       DisableGetRule: false # Disable Get Rule from the panel
       DisableIVCheck: false # Disable the anti-reply protection for Shadowsocks
-      DisableSniffing: true # Disable domain sniffing
       EnableProxyProtocol: false # Only works for WebSocket and TCP
       EnableFallback: false # Only support for Trojan and Vless
       FallBackConfigs:  # Support multiple fallbacks
