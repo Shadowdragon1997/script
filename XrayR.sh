@@ -474,6 +474,11 @@ benchmark() {
     wget -qO- bench.sh | bash
 }
 
+close_menu() {
+    clear
+    exit
+}
+
 show_usage() {
     echo -e ""
     echo "  Cách sử dụng tập lệnh quản lý XrayR     " 
@@ -508,10 +513,12 @@ show_menu() {
  ${green}14.${plain} Tạo tệp cấu hình AikoXrayR
  ${green}15.${plain} Cho phép tất cả các cổng mạng của VPS
  ${green}16.${plain} Benchmark kiểm tra thông số CPU, RAM, IO và Speedtest
+ ————————————————
+ ${green}17.${plain} Thoát Menu
  "
  #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
     show_status
-    echo && read -p "Vui lòng nhập một lựa chọn [0-16]: " num
+    echo && read -p "Vui lòng nhập một lựa chọn [0-17]: " num
 
     case "${num}" in
         0) config ;;
@@ -531,10 +538,10 @@ show_menu() {
         14) generate_config_file ;;
         15) open_ports ;;
         16) benchmark ;;
+        17) close_menu ;;
         *) echo -e "${red}Vui lòng nhập số chính xác [0-16]${plain}" ;;
     esac
 }
-
 
 if [[ $# > 0 ]]; then
     case $1 in
