@@ -539,7 +539,7 @@ show_menu() {
         15) open_ports ;;
         16) benchmark ;;
         17) close_menu ;;
-        *) echo -e "${red}Vui lòng nhập số chính xác [0-16]${plain}" ;;
+        *) echo -e "${red}Vui lòng nhập số chính xác [0-17]${plain}" ;;
     esac
 }
 
