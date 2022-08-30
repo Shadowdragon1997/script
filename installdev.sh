@@ -158,7 +158,7 @@ install_AikoR() {
         if [[ $? == 0 ]]; then
             echo -e "${green}AikoR khởi động lại thành công${plain}"
         else
-            echo -e "${red}AikoR Có thể không khởi động, vui lòng sử dụng nhật ký AikoR log để kiểm tra thông tin nhật ký, nếu không khởi động được, định dạng cấu hình có thể đã bị thay đổi, vui lòng vào wiki để kiểm tra ： https://github.com/AikoCute-Offical/ AikoR${plain}"
+            echo -e "${red}AikoR Có thể không khởi động, vui lòng sử dụng xem nhật ký AikoR để kiểm tra thông tin nhật ký, nếu không khởi động được, định dạng cấu hình có thể đã bị thay đổi, vui lòng vào wiki để kiểm tra ： https://github.com/AikoCute-Offical/ AikoR${plain}"
         fi
     fi
 
