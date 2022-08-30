@@ -66,7 +66,7 @@ confirm() {
 }
 
 confirm_restart() {
-    confirm "Có khởi động lại AikoXrayR không" "y"
+    confirm "Có khởi động lại AikoR không" "y"
     if [[ $? == 0 ]]; then
         restart
     else
@@ -96,9 +96,17 @@ update() {
     else
         version=$2
     fi
+#    confirm "Chức năng này sẽ buộc cài đặt lại phiên bản mới nhất và dữ liệu sẽ không bị mất. Bạn có muốn tiếp tục không?" "n"
+#    if [[ $? != 0 ]]; then
+#        echo -e "${red}Đã hủy${plain}"
+#        if [[ $1 != 0 ]]; then
+#            before_show_menu
+#        fi
+#        return 0
+#    fi
     bash <(curl -Ls https://raw.githubusercontent.com/Shadowdragon1997/script/main/updatedev.sh) $version
     if [[ $? == 0 ]]; then
-        echo -e "${green}Cập nhật hoàn tất, AikoXrayR đã được khởi động lại tự động, vui lòng sử dụng nhật ký XrayR để xem nhật ký chạy${plain}"
+        echo -e "${green}Cập nhật hoàn tất, AikoR đã được khởi động lại tự động, vui lòng sử dụng xem nhật ký AikoR để xem nhật ký chạy${plain}"
         exit
     fi
 
@@ -108,46 +116,46 @@ update() {
 }
 
 config() {
-    echo "AikoXrayR sẽ tự động khởi động lại sau khi sửa đổi cấu hình"
-    vi /etc/XrayR/aiko.yml
+    echo "AikoR sẽ tự động khởi động lại sau khi sửa đổi cấu hình"
+    nano /etc/AikoR/aiko.yml
     sleep 2
     check_status
     case $? in
         0)
-            echo -e "Trạng thái AikoXrayR: ${green} Đã được chạy${plain}"
+            echo -e "Trạng thái AikoR: ${green} Running ${plain}"
             ;;
         1)
-            echo -e "Phát hiện bạn không khởi động AikoXrayR hoặc AikoXrayR không tự khởi động lại được, hãy kiểm tra nhật ký? [Y/n]" && echo
-            read -e -p "(Mặc định: y):" yn
+            echo -e "Phát hiện rằng bạn không khởi động AikoR hoặc AikoR không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
+            read -e -p "(yes or no):" yn
             [[ -z ${yn} ]] && yn="y"
             if [[ ${yn} == [Yy] ]]; then
                show_log
             fi
             ;;
         2)
-            echo -e "Trạng thái AikoXrayR: ${red} Chưa cài đặt${plain}"
+            echo -e "Trạng thái AikoR: ${red} Không được cài đặt ${plain}"
     esac
 }
 
 uninstall() {
-    confirm "Bạn có chắc chắn muốn gỡ cài đặt AikoXrayR không?" "n"
+    confirm "Bạn có chắc chắn muốn gỡ cài đặt AikoR không?" "n"
     if [[ $? != 0 ]]; then
         if [[ $# == 0 ]]; then
             show_menu
         fi
         return 0
     fi
-    systemctl stop XrayR
-    systemctl disable XrayR
-    rm /etc/systemd/system/XrayR.service -f
+    systemctl stop AikoR
+    systemctl disable AikoR
+    rm /etc/systemd/system/AikoR.service -f
     systemctl daemon-reload
     systemctl reset-failed
-    rm /etc/XrayR/ -rf
-    rm /usr/local/XrayR/ -rf
-    rm /usr/bin/XrayR -f
+    rm /etc/AikoR/ -rf
+    rm /usr/local/AikoR/ -rf
+    rm /usr/bin/AikoR -f
 
     echo ""
-    echo -e "${green} Đã gỡ thành công AikoXrayR hoàn toàn ${plain}"
+    echo -e "${green}Gỡ cài đặt thành công, đã gỡ cài đặt AikoR hoàn toàn khỏi hệ thống${plain}"
     echo ""
 
     if [[ $# == 0 ]]; then
@@ -159,15 +167,15 @@ start() {
     check_status
     if [[ $? == 0 ]]; then
         echo ""
-        echo -e "${green}AikoXrayR đã chạy rồi, không cần khởi động lại, nếu muốn khởi động lại, vui lòng chọn khởi động lại${plain}"
+        echo -e "${green}AikoR đã chạy rồi, không cần khởi động lại, nếu muốn khởi động lại, vui lòng chọn khởi động lại${plain}"
     else
-        systemctl start XrayR
+        systemctl start AikoR
         sleep 2
         check_status
         if [[ $? == 0 ]]; then
-            echo -e "${green}AikoXrayR đã khởi động thành công, vui lòng sử dụng nhật ký AikoXrayR để xem nhật ký đang chạy${plain}"
+            echo -e "${green}AikoR đã khởi động thành công, vui lòng sử dụng xem nhật ký AikoR để xem nhật ký đang chạy${plain}"
         else
-            echo -e "${red}AikoXrayR có thể không khởi động được, vui lòng sử dụng nhật ký AikoXrayR để xem thông tin nhật ký sau này${plain}"
+            echo -e "${red}AikoR có thể không khởi động được, vui lòng sử dụng xem nhật ký AikoR để xem thông tin nhật ký sau này${plain}"
         fi
     fi
 
@@ -177,13 +185,13 @@ start() {
 }
 
 stop() {
-    systemctl stop XrayR
+    systemctl stop AikoR
     sleep 2
     check_status
     if [[ $? == 1 ]]; then
-        echo -e "${green}AikoXrayR đã dừng thành công${plain}"
+        echo -e "${green}AikoR đã dừng thành công${plain}"
     else
-        echo -e "${red}AikoXrayR không dừng được, có thể do thời gian dừng vượt quá hai giây, vui lòng kiểm tra thông tin nhật ký sau${plain}"
+        echo -e "${red}AikoR không thể dừng lại, có thể do thời gian dừng quá hai giây, vui lòng sử dụng xem nhật ký AikoR để xem nguyên nhân${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -192,13 +200,13 @@ stop() {
 }
 
 restart() {
-    systemctl restart XrayR
+    systemctl restart AikoR
     sleep 2
     check_status
     if [[ $? == 0 ]]; then
-        echo -e "${green}AikoXrayR đã khởi động lại thành công, vui lòng sử dụng nhật ký XrayR để xem nhật ký đang chạy${plain}"
+        echo -e "${green}AikoR đã khởi động lại thành công, vui lòng sử dụng xem nhật ký AikoR để xem nhật ký đang chạy${plain}"
     else
-        echo -e "${red}AikoXrayR có thể không khởi động được, vui lòng sử dụng nhật ký XrayR để xem thông tin nhật ký sau này${plain}"
+        echo -e "${red}AikoR có thể không khởi động được, vui lòng sử dụng xem nhật ký AikoR để xem thông tin nhật ký sau này${plain}"
     fi
     if [[ $# == 0 ]]; then
         before_show_menu
@@ -206,18 +214,18 @@ restart() {
 }
 
 status() {
-    systemctl status XrayR --no-pager -l
+    systemctl status AikoR --no-pager -l
     if [[ $# == 0 ]]; then
         before_show_menu
     fi
 }
 
 enable() {
-    systemctl enable XrayR
+    systemctl enable AikoR
     if [[ $? == 0 ]]; then
-        echo -e "${green}AikoXrayR Đặt khởi động để bắt đầu thành công${plain}"
+        echo -e "${green}AikoR Đặt khởi động để bắt đầu thành công${plain}"
     else
-        echo -e "${red}AikoXrayR Không đặt được tự động khởi động khi khởi động${plain}"
+        echo -e "${red}AikoR Không đặt được tự động khởi động khi khởi động${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -226,11 +234,11 @@ enable() {
 }
 
 disable() {
-    systemctl disable XrayR
+    systemctl disable AikoR
     if [[ $? == 0 ]]; then
         echo -e "${green}AikoXrayR Hủy khởi động tự động bắt đầu thành công${plain}"
     else
-        echo -e "${red}AikoXrayR Không thể hủy tự động khởi động khởi động${plain}"
+        echo -e "${red}AikoXrayR Không thể hủy tự động khởi động${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -239,34 +247,34 @@ disable() {
 }
 
 show_log() {
-    journalctl -u XrayR.service -e --no-pager -f
+    journalctl -u AikoR.service -e --no-pager -f
     if [[ $# == 0 ]]; then
         before_show_menu
     fi
 }
 
 install_bbr() {
-    bash <(curl -L -s https://raw.githubusercontent.com/AikoCute/BBR-1/aiko/tcp.sh)
+    bash <(curl -L -s https://raw.githubusercontent.com/AikoCute-Offical/Linux-BBR/aiko/tcp.sh)
 }
 
 update_shell() {
-    wget -O /usr/bin/XrayR -N --no-check-certificate https://raw.githubusercontent.com/Shadowdragon1997/script/main/XrayR.sh
+    wget -O /usr/bin/AikoR -N --no-check-certificate https://raw.githubusercontent.com/Shadowdragon1997/script/main/AikoR.sh
     if [[ $? != 0 ]]; then
         echo ""
-        echo -e "${red}Không tải được script xuống, vui lòng kiểm tra xem máy có thể kết nối với Github không${plain}"
+        echo -e "${red}Tập lệnh không tải xuống được, vui lòng kiểm tra xem máy có thể kết nối với Github không${plain}"
         before_show_menu
     else
-        chmod +x /usr/bin/XrayR
-        echo -e "${green}Tập lệnh nâng cấp thành công, vui lòng chạy lại tập lệnh${plain}" && exit 0
+        chmod +x /usr/bin/AikoR
+        echo -e "${green} Nâng cấp tập lệnh thành công, vui lòng chạy lại tập lệnh ${plain}" && exit 0
     fi
 }
 
 # 0: running, 1: not running, 2: not installed
 check_status() {
-    if [[ ! -f /etc/systemd/system/XrayR.service ]]; then
+    if [[ ! -f /etc/systemd/system/AikoR.service ]]; then
         return 2
     fi
-    temp=$(systemctl status XrayR | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
+    temp=$(systemctl status AikoR | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
     if [[ x"${temp}" == x"running" ]]; then
         return 0
     else
@@ -275,7 +283,7 @@ check_status() {
 }
 
 check_enabled() {
-    temp=$(systemctl is-enabled XrayR)
+    temp=$(systemctl is-enabled AikoR)
     if [[ x"${temp}" == x"enabled" ]]; then
         return 0
     else
@@ -287,7 +295,7 @@ check_uninstall() {
     check_status
     if [[ $? != 2 ]]; then
         echo ""
-        echo -e "${red}AikoXrayR đã được cài đặt, vui lòng không cài đặt lại${plain}"
+        echo -e "${red} AikoR đã được cài đặt, vui lòng không cài đặt lại ${plain}"
         if [[ $# == 0 ]]; then
             before_show_menu
         fi
@@ -301,7 +309,7 @@ check_install() {
     check_status
     if [[ $? == 2 ]]; then
         echo ""
-        echo -e "${red}Vui lòng cài đặt AikoXrayR trước${plain}"
+        echo -e "${red} Vui lòng cài đặt AikoR trước ${plain}"
         if [[ $# == 0 ]]; then
             before_show_menu
         fi
@@ -315,15 +323,15 @@ show_status() {
     check_status
     case $? in
         0)
-            echo -e "Trạng thái AikoXrayR: ${green}Đã được chạy${plain}"
+            echo -e "Trạng thái AikoR: ${green}Đã được chạy${plain}"
             show_enable_status
             ;;
         1)
-            echo -e "Trạng thái AikoXrayR: ${yellow}Không được chạy${plain}"
+            echo -e "Trạng thái AikoR: ${yellow}Không được chạy${plain}"
             show_enable_status
             ;;
         2)
-            echo -e "Trạng thái AikoXrayR: ${red}Chưa cài đặt${plain}"
+            echo -e "Trạng thái AikoR: ${red}Chưa cài đặt${plain}"
     esac
 }
 
@@ -337,8 +345,8 @@ show_enable_status() {
 }
 
 show_XrayR_version() {
-    echo -n "Phiên bản AikoXrayR："
-    /usr/local/XrayR/XrayR -version
+    echo -n "Phiên bản AikoR ："
+    /usr/local/AikoR/AikoR -version
     echo ""
     if [[ $# == 0 ]]; then
         before_show_menu
@@ -346,11 +354,11 @@ show_XrayR_version() {
 }
 
 generate_config_file() {
-    echo -e "${yellow}AikoXrayR Trình hướng dẫn tạo tệp cấu hình${plain}"
+    echo -e "${yellow}AikoR Trình hướng dẫn tạo tệp cấu hình${plain}"
     echo -e "${red}Vui lòng đọc các ghi chú sau:${plain}"
     echo -e "${red}1. Tính năng này hiện đang trong giai đoạn thử nghiệm${plain}"
-    echo -e "${red}2. Tệp cấu hình đã tạo sẽ được lưu vào /etc/XrayR/config.yml${plain}"
-    echo -e "${red}3. Tệp cấu hình gốc sẽ được lưu vào /etc/XrayR/config.yml.bak${plain}"
+    echo -e "${red}2. Tệp cấu hình đã tạo sẽ được lưu vào /etc/AikoR/aiko.yml${plain}"
+    echo -e "${red}3. Tệp cấu hình gốc sẽ được lưu vào /etc/AikoR/aiko.yml.bak${plain}"
     echo -e "${red}4. TLS hiện không được hỗ trợ${plain}"
     read -p "Bạn có muốn tiếp tục tạo các tệp cấu hình không? (y/n)" generate_config_file_continue
     if [[ $generate_config_file_continue =~ "y"|"Y" ]]; then
@@ -385,17 +393,17 @@ generate_config_file() {
             4 ) NodeType="Trojan" ;;
             * ) NodeType="Shadowsocks" ;;
         esac
-        cd /etc/XrayR
+        cd /etc/AikoR
         mv aiko.yml aiko.yml.bak
-        cat <<EOF > /etc/XrayR/aiko.yml
+        cat <<EOF > /etc/AikoR/aiko.yml
 Log:
   Level: warning # Log level: none, error, warning, info, debug 
-  AccessPath: # /etc/XrayR/access.Log
-  ErrorPath: # /etc/XrayR/error.log
-DnsConfigPath: # /etc/XrayR/dns.json # Path to dns config, check https://xtls.github.io/config/base/dns/ for help
-InboundConfigPath: # /etc/XrayR/custom_inbound.json # Path to custom inbound config, check https://xtls.github.io/config/inbound.html for help
-RouteConfigPath: # /etc/XrayR/route.json # Path to route config, check https://xtls.github.io/config/base/route/ for help
-OutboundConfigPath: # /etc/XrayR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/base/outbound/ for help
+  AccessPath: # /etc/AikoR/access.Log
+  ErrorPath: # /etc/AikoR/error.log
+DnsConfigPath: # /etc/AikoR/dns.json # Path to dns config, check https://xtls.github.io/config/base/dns/ for help
+InboundConfigPath: # /etc/AikoR/custom_inbound.json # Path to custom inbound config, check https://xtls.github.io/config/inbound.html for help
+RouteConfigPath: # /etc/AikoR/route.json # Path to route config, check https://xtls.github.io/config/base/route/ for help
+OutboundConfigPath: # /etc/AikoR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/base/outbound/ for help
 ConnetionConfig:
   Handshake: 4 # Handshake time limit, Second
   ConnIdle: 30 # Connection idle time limit, Second
@@ -415,7 +423,7 @@ Nodes:
       EnableXTLS: false # Enable XTLS for V2ray and Trojan
       SpeedLimit: $Numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
       DeviceLimit: $Numberdevice # Local settings will replace remote settings, 0 means disable
-      RuleListPath: # /etc/XrayR/AikoBlock Path to local rulelist file
+      RuleListPath: # /etc/AikoR/AikoBlock Path to local rulelist file
     ControllerConfig:
       ListenIP: 0.0.0.0 # IP address you want to listen
       SendIP: 0.0.0.0 # IP address you want to send pacakage
@@ -436,8 +444,8 @@ Nodes:
       CertConfig:
         CertMode: file # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
         CertDomain: "$CertDomain" # Domain to cert
-        CertFile: /etc/XrayR/server.pem # Provided if the CertMode is file
-        KeyFile: /etc/XrayR/privkey.pem
+        CertFile: /etc/AikoR/server.pem # Provided if the CertMode is file
+        KeyFile: /etc/AikoR/privkey.pem
         Provider: cloudflare # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
         Email: nguyendovietkhoa@gmail.com
         DNSEnv: # DNS ENV option used by DNS provider
@@ -483,34 +491,34 @@ show_usage() {
     echo -e ""
     echo "  Cách sử dụng tập lệnh quản lý XrayR     " 
     echo "------------------------------------------"
-    echo "           XrayR   - Show admin menu      "
-    echo "         AikoXrayR - XrayR by AikoCute    "
+    echo "           AikoR   - Show admin menu      "
+    echo "         AikoR - AikoR by AikoCute    "
     echo "------------------------------------------"
 }
 
 show_menu() {
     echo -e "
-  ${green}Các tập lệnh quản lý phụ trợ AikoXrayR，${plain}${red} không hoạt động với docker${plain}
---- https://github.com/AikoCute/XrayR ---
+  ${green}Các tập lệnh quản lý phụ trợ AikoR，${plain}${red} không hoạt động với docker${plain}
+--- https://github.com/AikoCute-Offical/AikoR ---
   ${green}0.${plain} Settings Config
 ————————————————
-  ${green}1.${plain} Cài đặt AikoXrayR
-  ${green}2.${plain} Cập nhật AikoXrayR
-  ${green}3.${plain} Gỡ cài đặt AikoXrayR
+  ${green}1.${plain} Cài đặt AikoR
+  ${green}2.${plain} Cập nhật AikoR
+  ${green}3.${plain} Gỡ cài đặt AikoR
 ————————————————
-  ${green}4.${plain} Khởi động AikoXrayR
-  ${green}5.${plain} Dừng AikoXrayR
-  ${green}6.${plain} Khởi động lại AikoXrayR
-  ${green}7.${plain} Xem trạng thái AikoXrayR
-  ${green}8.${plain} Xem nhật ký AikoXrayR (log)
+  ${green}4.${plain} Khởi động AikoR
+  ${green}5.${plain} Dừng AikoR
+  ${green}6.${plain} Khởi động lại AikoR
+  ${green}7.${plain} Xem trạng thái AikoR
+  ${green}8.${plain} Xem nhật ký AikoR (log)
 ————————————————
-  ${green}9.${plain} Đặt AikoXrayR để bắt đầu tự động
- ${green}10.${plain} Hủy tự động khởi động AikoXrayR
+  ${green}9.${plain} Đặt AikoR để bắt đầu tự động
+ ${green}10.${plain} Hủy tự động khởi động AikoR
 ————————————————
  ${green}11.${plain} Một cú nhấp chuột cài đặt bbr (hạt nhân mới nhất)
- ${green}12.${plain} Xem các phiên bản AikoXrayR
- ${green}13.${plain} Nâng cấp tập lệnh bảo trì AikoXrayR
- ${green}14.${plain} Tạo tệp cấu hình AikoXrayR
+ ${green}12.${plain} Xem các phiên bản AikoR
+ ${green}13.${plain} Nâng cấp tập lệnh bảo trì AikoR
+ ${green}14.${plain} Tạo tệp cấu hình AikoR
  ${green}15.${plain} Cho phép tất cả các cổng mạng của VPS
  ${green}16.${plain} Benchmark kiểm tra thông số CPU, RAM, IO và Speedtest
  ————————————————
