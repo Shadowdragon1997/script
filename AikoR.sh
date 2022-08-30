@@ -236,9 +236,9 @@ enable() {
 disable() {
     systemctl disable AikoR
     if [[ $? == 0 ]]; then
-        echo -e "${green}AikoXrayR Hủy khởi động tự động bắt đầu thành công${plain}"
+        echo -e "${green}AikoR Hủy khởi động tự động bắt đầu thành công${plain}"
     else
-        echo -e "${red}AikoXrayR Không thể hủy tự động khởi động${plain}"
+        echo -e "${red}AikoR Không thể hủy tự động khởi động${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -344,7 +344,7 @@ show_enable_status() {
     fi
 }
 
-show_XrayR_version() {
+show_AikoR_version() {
     echo -n "Phiên bản AikoR ："
     /usr/local/AikoR/AikoR -version
     echo ""
@@ -452,11 +452,11 @@ Nodes:
           CLOUDFLARE_EMAIL: nguyendovietkhoa@gmail.com
           CLOUDFLARE_API_KEY: 13b94cc24f9c0f6a56112df9b1abb79808bbd
 EOF
-        echo -e "${green}Tạo tệp cấu hình AikoXrayR hoàn tất, khởi động lại dịch vụ AikoXrayR${plain}"
-        xrayr restart
+        echo -e "${green}Tạo tệp cấu hình AikoR hoàn tất, khởi động lại dịch vụ AikoR${plain}"
+        aikor restart
         before_show_menu
     else
-        echo -e "${red}Đã hủy tạo hồ sơ AikoXrayR${plain}"
+        echo -e "${red}Đã hủy tạo hồ sơ AikoR${plain}"
         before_show_menu
     fi
 }
@@ -489,7 +489,7 @@ close_menu() {
 
 show_usage() {
     echo -e ""
-    echo "  Cách sử dụng tập lệnh quản lý XrayR     " 
+    echo "  Cách sử dụng tập lệnh quản lý AikoR     " 
     echo "------------------------------------------"
     echo "           AikoR   - Show admin menu      "
     echo "         AikoR - AikoR by AikoCute    "
@@ -541,7 +541,7 @@ show_menu() {
         9) check_install && enable ;;
         10) check_install && disable ;;
         11) install_bbr ;;
-        12) check_install && show_XrayR_version ;;
+        12) check_install && show_AikoR_version ;;
         13) update_shell ;;
         14) generate_config_file ;;
         15) open_ports ;;
@@ -565,7 +565,7 @@ if [[ $# > 0 ]]; then
         "generate") generate_config_file ;;
         "install") check_uninstall 0 && install 0 ;;
         "uninstall") check_install 0 && uninstall 0 ;;
-        "version") check_install 0 && show_XrayR_version 0 ;;
+        "version") check_install 0 && show_AikoR_version 0 ;;
         "update_shell") update_shell ;;
         "benchmark") benchmark ;;
         "bbr") install_bbr ;;
