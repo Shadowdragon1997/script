@@ -85,10 +85,10 @@ install_base() {
 
 # 0: running, 1: not running, 2: not installed
 check_status() {
-    if [[ ! -f /etc/systemd/system/XrayR.service ]]; then
+    if [[ ! -f /etc/systemd/system/AikoR.service ]]; then
         return 2
     fi
-    temp=$(systemctl status XrayR | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
+    temp=$(systemctl status AikoR | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
     if [[ x"${temp}" == x"running" ]]; then
         return 0
     else
@@ -114,7 +114,7 @@ install_AikoR() {
             echo -e "${red}Không phát hiện được phiên bản AikoR, có thể đã vượt quá giới hạn Github API, vui lòng thử lại sau hoặc chỉ định cài đặt phiên bản AikoR theo cách thủ công${plain}"
             exit 1
         fi
-        echo -e "Phiên bản mới nhất của XrayR đã được phát hiện：${last_version}，Bắt đầu cài đặt"
+        echo -e "Phiên bản mới nhất của AikoR đã được phát hiện：${last_version}，Bắt đầu cài đặt"
         wget -N --no-check-certificate -O /usr/local/AikoR/AikoR-linux.zip https://github.com/AikoCute-Offical/AikoR/releases/download/${last_version}/AikoR-linux-${arch}.zip
         if [[ $? -ne 0 ]]; then
             echo -e "${red}Tải xuống AikoR không thành công, hãy đảm bảo máy chủ của bạn có thể tải xuống tệp Github${plain}"
@@ -258,15 +258,15 @@ fi
          cat <<EOF >/etc/AikoR/aiko.yml
 Log:
   Level: warning # Log level: none, error, warning, info, debug 
-  AccessPath: # /etc/XrayR/access.Log
-  ErrorPath: # /etc/XrayR/error.log
-DnsConfigPath: # /etc/XrayR/dns.json # Path to dns config, check https://xtls.github.io/config/dns.html for help
-RouteConfigPath: # /etc/XrayR/route.json # Path to route config, check https://xtls.github.io/config/routing.html for help
-InboundConfigPath: # /etc/XrayR/custom_inbound.json # Path to custom inbound config, check https://xtls.github.io/config/inbound.html for help
-OutboundConfigPath: # /etc/XrayR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/outbound.html for help
+  AccessPath: # /etc/AikoR/access.Log
+  ErrorPath: # /etc/AikoR/error.log
+DnsConfigPath: # /etc/AikoR/dns.json # Path to dns config, check https://xtls.github.io/config/dns.html for help
+RouteConfigPath: # /etc/AikoR/route.json # Path to route config, check https://xtls.github.io/config/routing.html for help
+InboundConfigPath: # /etc/AikoR/custom_inbound.json # Path to custom inbound config, check https://xtls.github.io/config/inbound.html for help
+OutboundConfigPath: # /etc/AikoR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/outbound.html for help
 ConnetionConfig:
   Handshake: 4 # Handshake time limit, Second
-  ConnIdle: 30 # Connection idle time limit, Second
+  ConnIdle: 86400 # Connection idle time limit, Second
   UplinkOnly: 2 # Time limit when the connection downstream is closed, Second
   DownlinkOnly: 4 # Time limit when the connection is closed after the uplink is closed, Second
   BufferSize: 64 # The internal cache size of each connection, kB 
@@ -283,7 +283,7 @@ Nodes:
       EnableXTLS: false # Enable XTLS for V2ray and Trojan
       SpeedLimit: $Numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
       DeviceLimit: $Numberdevice # Local settings will replace remote settings, 0 means disable
-      RuleListPath: # /etc/XrayR/AikoBlock Path to local rulelist file
+      RuleListPath: # /etc/AikoR/AikoBlock Path to local rulelist file
     ControllerConfig:
       ListenIP: 0.0.0.0 # IP address you want to listen
       SendIP: 0.0.0.0 # IP address you want to send pacakage
@@ -304,8 +304,8 @@ Nodes:
       CertConfig:
         CertMode: file # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
         CertDomain: "$CertDomain" # Domain to cert
-        CertFile: /etc/XrayR/server.pem # Provided if the CertMode is file
-        KeyFile: /etc/XrayR/privkey.pem
+        CertFile: /etc/AikoR/server.pem # Provided if the CertMode is file
+        KeyFile: /etc/AikoR/privkey.pem
         Provider: cloudflare # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
         Email: nguyendovietkhoa@gmail.com
         DNSEnv: # DNS ENV option used by DNS provider
@@ -323,7 +323,7 @@ Nodes:
       EnableXTLS: false # Enable XTLS for V2ray and Trojan
       SpeedLimit: $Numberspeed # Mbps, Local settings will replace remote settings, 0 means disable
       DeviceLimit: $Numberdevice # Local settings will replace remote settings, 0 means disable
-      RuleListPath: # /etc/XrayR/AikoBlock Path to local rulelist file
+      RuleListPath: # /etc/AikoR/AikoBlock Path to local rulelist file
     ControllerConfig:
       ListenIP: 0.0.0.0 # IP address you want to listen
       SendIP: 0.0.0.0 # IP address you want to send pacakage
@@ -344,8 +344,8 @@ Nodes:
       CertConfig:
         CertMode: file # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
         CertDomain: "$CertDomain" # Domain to cert
-        CertFile: /etc/XrayR/server.pem # Provided if the CertMode is file
-        KeyFile: /etc/XrayR/privkey.pem
+        CertFile: /etc/AikoR/server.pem # Provided if the CertMode is file
+        KeyFile: /etc/AikoR/privkey.pem
         Provider: cloudflare # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
         Email: nguyendovietkhoa@gmail.com
         DNSEnv: # DNS ENV option used by DNS provider
