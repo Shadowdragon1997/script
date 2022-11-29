@@ -248,6 +248,8 @@ fi
         echo "---------------"
     read -p "Số lượng thiết bị giới hạn có thể sử dụng là: " Numberdevice
         echo "---------------"
+    read -p "API Key Cloudflare là: " ApiKeyCloudflare
+        echo "---------------"
 
 	rm -f /etc/AikoR/aiko.yml
 	if [[ -z $(~/.acme.sh/acme.sh -v 2>/dev/null) ]]; then
@@ -310,7 +312,7 @@ Nodes:
         Email: nguyendovietkhoa@gmail.com
         DNSEnv: # DNS ENV option used by DNS provider
           CLOUDFLARE_EMAIL: nguyendovietkhoa@gmail.com
-          CLOUDFLARE_API_KEY: 13b94cc24f9c0f6a56112df9b1abb79808bbd
+          CLOUDFLARE_API_KEY: "$ApiKeyCloudflare"
   -
     PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, Proxypanel
     ApiConfig:
@@ -350,7 +352,7 @@ Nodes:
         Email: nguyendovietkhoa@gmail.com
         DNSEnv: # DNS ENV option used by DNS provider
           CLOUDFLARE_EMAIL: nguyendovietkhoa@gmail.com
-          CLOUDFLARE_API_KEY: 13b94cc24f9c0f6a56112df9b1abb79808bbd
+          CLOUDFLARE_API_KEY: "$ApiKeyCloudflare"
 EOF
 
     echo -e ""
