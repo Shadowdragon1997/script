@@ -248,6 +248,8 @@ fi
         echo "---------------"
     read -p "Số lượng thiết bị giới hạn có thể sử dụng là: " Numberdevice
         echo "---------------"
+    read -p "Email tài khoản Cloudflare là: " EmailCloudflare
+        echo "---------------"
     read -p "API Key Cloudflare là: " ApiKeyCloudflare
         echo "---------------"
 
@@ -311,7 +313,7 @@ Nodes:
         Provider: cloudflare # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
         Email: nguyendovietkhoa@gmail.com
         DNSEnv: # DNS ENV option used by DNS provider
-          CLOUDFLARE_EMAIL: nguyendovietkhoa@gmail.com
+          CLOUDFLARE_EMAIL: "$EmailCloudflare"
           CLOUDFLARE_API_KEY: "$ApiKeyCloudflare"
   -
     PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, Proxypanel
@@ -351,7 +353,7 @@ Nodes:
         Provider: cloudflare # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
         Email: nguyendovietkhoa@gmail.com
         DNSEnv: # DNS ENV option used by DNS provider
-          CLOUDFLARE_EMAIL: nguyendovietkhoa@gmail.com
+          CLOUDFLARE_EMAIL: "$EmailCloudflare"
           CLOUDFLARE_API_KEY: "$ApiKeyCloudflare"
 EOF
 
